@@ -1,0 +1,34 @@
+
+<div>
+  <label>Reader name:
+    <input #readerName />
+  </label>
+  <button (click)="add(readerName.value); readerName.value=''">
+    add
+  </button>
+</div>
+
+<!--<h2>{{reader.name + " " + reader.surname | uppercase}} Details</h2>-->
+<!--<div><span>id: </span>{{reader.id}}</div>-->
+<!--<div>-->
+<!--  <label>name:-->
+<!--    <input [(ngModel)]="reader.name" placeholder="name"/>-->
+<!--  </label>-->
+<!--  <label>surname:-->
+<!--    <input [(ngModel)]="reader.surname" placeholder="surname"/>-->
+<!--  </label>-->
+<!--</div>-->
+
+
+<h2>My Readers</h2>
+<ul class="readers">
+  <li *ngFor="let reader of readers">
+    <a routerLink="/detail/{{reader.id}}">
+      <span class="badge">{{reader.id}}</span> {{reader.name + ' ' + reader.surname}}
+      <button class="delete" title="delete hero" (click)="delete(reader)">x</button>
+    </a>
+  </li>
+</ul>
+
+
+<app-reader-detail [reader]="selectedReader"></app-reader-detail>
