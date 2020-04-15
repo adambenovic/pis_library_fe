@@ -44,7 +44,8 @@ export class ReaderService {
   }
 
   updateReader(reader: Reader): Observable<any> {
-    return this.http.put(this.readersUrl, reader, this.httpOptions).pipe(
+    const url = `${this.readersUrl}/${reader.id}`;
+    return this.http.put(url, reader, this.httpOptions).pipe(
       tap(_ => this.log(`updated reader id=${reader.id}`)),
       catchError(this.handleError<any>('updateReader'))
     );

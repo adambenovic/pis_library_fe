@@ -4,11 +4,12 @@ import { NgModule } from '@angular/core';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { ReaderComponent } from './reader/reader.component';
-import {FormsModule} from '@angular/forms';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { ReaderDetailComponent } from './reader-detail/reader-detail.component';
 import { MessagesComponent } from './messages/messages.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { HttpClientModule } from '@angular/common/http';
+import { RegistrationFormComponent } from './registration-form/registration-form.component';
 
 @NgModule({
   declarations: [
@@ -16,14 +17,16 @@ import { HttpClientModule } from '@angular/common/http';
     ReaderComponent,
     ReaderDetailComponent,
     MessagesComponent,
-    DashboardComponent
+    DashboardComponent,
+    RegistrationFormComponent
   ],
-    imports: [
-        BrowserModule,
-        AppRoutingModule,
-        FormsModule,
-        HttpClientModule,
-    ],
+  imports: [
+    BrowserModule,
+    AppRoutingModule,
+    FormsModule,
+    HttpClientModule,
+    ReactiveFormsModule,
+  ],
   providers: [],
   bootstrap: [AppComponent]
 })

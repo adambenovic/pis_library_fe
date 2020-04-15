@@ -1,0 +1,44 @@
+<div class="form-style-10">
+  <h1>Registrácia čítateľa v knižnici</h1>
+  <form [formGroup]="registrationForm" (ngSubmit)="onSubmit()">
+    <div class="section"><span>1</span>Osobné údaje</div>
+    <div class="inner-wrap">
+      <label>Meno:<span class="required">*</span><input type="text" formControlName="name"></label>
+      <label>Priezvisko:<span class="required">*</span><input type="text" formControlName="surname"></label>
+      <label>Dátum narodenia:<span class="required">*</span><input type="date" formControlName="dateOfBirth"></label>
+      <label>Rodné číslo:<span class="required">*</span><input type="text" formControlName="personalIdentificationNumber"></label>
+      <label>Som:<span class="required">*</span>
+        <select (change)="changeType($event)"formControlName="type">
+          <option value="" disabled></option>
+          <option *ngFor="let type of types" [ngValue]="type">{{type}}</option>
+        </select>
+      </label>
+      <div *ngIf="selectedType == '2: Študent(držiteľ ISIC karty)'">
+        <label>Číslo karty ISIC:<span class="required">*</span><input type="text" formControlName="isicNumber"></label>
+      </div>
+    </div>
+
+    <div formGroupName="address">
+      <div class="section"><span>2</span>Adresa</div>
+      <div class="inner-wrap">
+        <label>Ulica:<span class="required">*</span><input type="text" formControlName="name"></label>
+        <label>Číslo:<span class="required">*</span><input type="text" formControlName="name"></label>
+        <label>PSČ:<span class="required">*</span><input type="text" formControlName="name"></label>
+        <label>Mesto:<span class="required">*</span><input type="text" formControlName="name"></label>
+      </div>
+    </div>
+
+    <div class="section"><span>3</span>Kontaktné údaje</div>
+    <div class="inner-wrap">
+      <label>E-mail:<span class="required">*</span><input type="text" formControlName="email"></label>
+      <label>Telefón:<input type="text" formControlName="phone"></label>
+    </div>
+
+    <div class="button-section">
+      <button type="submit" [disabled]="!registrationForm.valid">Odoslať</button>
+      <span class="privacy-policy">
+     <input type="checkbox" ><span class="required">*</span>Súhlasím s podmienkami používania.
+     </span>
+    </div>
+  </form>
+</div>

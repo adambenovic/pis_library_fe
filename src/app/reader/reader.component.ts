@@ -4,7 +4,7 @@ import { ReaderService } from '../reader.service';
 import { MessageService } from '../message.service';
 
 @Component({
-  selector: 'app-registration-form',
+  selector: 'app-reader',
   templateUrl: './reader.component.html',
   styleUrls: ['./reader.component.css']
 })
