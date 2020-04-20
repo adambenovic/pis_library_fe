@@ -1,14 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { Reader } from '../entity/reader';
-import { ReaderService } from '../reader.service';
-import { MessageService } from '../message.service';
+import { ReaderService } from '../service/reader.service';
+import { MessageService } from '../service/message.service';
 
 @Component({
   selector: 'app-reader',
-  templateUrl: './reader.component.html',
-  styleUrls: ['./reader.component.css']
+  templateUrl: './readers.component.html',
+  styleUrls: ['./readers.component.css']
 })
-export class ReaderComponent implements OnInit {
+export class ReadersComponent implements OnInit {
   selectedReader: Reader;
 
   readers: Reader[];

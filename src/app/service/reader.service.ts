@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
-import { Reader } from './entity/reader';
+import { Reader } from '../entity/reader';
 import {Observable, of } from 'rxjs';
-import {MessageService } from './message.service';
+import { MessageService} from './message.service';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { catchError, map, tap } from 'rxjs/operators';
-import {ReaderList} from './entity/readerList';
+import {ReaderList} from '../entity/readerList';
 
 @Injectable({
   providedIn: 'root'
@@ -37,9 +37,11 @@ export class ReaderService {
   }
 
   addReader(reader: Reader): Observable<Reader> {
+    this.messageService.add('Added readers' + JSON.stringify(reader));
+
     return this.http.post<Reader>(this.readersUrl, reader, this.httpOptions).pipe(
-      tap((newReader: Reader) => this.log(`added reader w/ id=${reader.id}`)),
-      catchError(this.handleError<Reader>('addHero'))
+      tap((newReader: Reader) => this.log(`added readers w/ id=${reader.id}`)),
+      catchError(this.handleError<Reader>('addReader'))
     );
   }
 

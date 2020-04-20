@@ -1,7 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
-import { ReaderService} from '../reader.service';
+import { ReaderService} from '../service/reader.service';
 import { Reader } from '../entity/reader';
 
 @Component({

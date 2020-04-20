@@ -21,23 +21,52 @@
     <div formGroupName="address">
       <div class="section"><span>2</span>Adresa</div>
       <div class="inner-wrap">
-        <label>Ulica:<span class="required">*</span><input type="text" formControlName="name"></label>
-        <label>Číslo:<span class="required">*</span><input type="text" formControlName="name"></label>
-        <label>PSČ:<span class="required">*</span><input type="text" formControlName="name"></label>
-        <label>Mesto:<span class="required">*</span><input type="text" formControlName="name"></label>
+        <label>Ulica:
+          <span class="required">*</span><input type="text" formControlName="street">
+<!--          <div *ngIf="street.invalid && street.touched" class="required">-->
+<!--            <div *ngIf = "street.errors?.required">Ulica nemôže byť prázdna!</div>-->
+<!--          </div>-->
+        </label>
+        <label>Číslo:
+          <span class="required">*</span><input type="text" formControlName="number">
+<!--          <div *ngIf="number.invalid && number.touched" class="required">-->
+<!--            <div *ngIf = "number.errors?.required">Číslo nemôže byť prázdne!</div>-->
+<!--          </div>-->
+        </label>
+        <label>PSČ:
+          <span class="required">*</span><input type="text" formControlName="zip">
+<!--          <div *ngIf="zip.invalid && zip.touched" class="required">-->
+<!--            <div *ngIf = "zip.errors?.required">PSČ nemôže byť prázdne!</div>-->
+<!--            <div *ngIf = "zip.errors?.pattern">PSČ zadávajte bez medzery(5 čísel)!</div>-->
+<!--          </div>-->
+        </label>
+        <label>Mesto:
+          <span class="required">*</span><input type="text" formControlName="city">
+        </label>
       </div>
     </div>
 
     <div class="section"><span>3</span>Kontaktné údaje</div>
     <div class="inner-wrap">
-      <label>E-mail:<span class="required">*</span><input type="text" formControlName="email"></label>
-      <label>Telefón:<input type="text" formControlName="phone"></label>
+      <label>E-mail:
+        <span class="required">*</span><input type="text" formControlName="email">
+        <div *ngIf="email.invalid && email.touched" class="required">
+          <div *ngIf = "email.errors?.required">E-mail nemôže byť prázdny!</div>
+          <div *ngIf = "email.errors?.email">Nesprávny formát!</div>
+        </div>
+      </label>
+      <label>Telefón:
+        <input type="text" formControlName="phone">
+        <div *ngIf="phone.invalid && phone.touched" class="required">
+          <div *ngIf = "phone.errors?.pattern">Nesprávny formát!</div>
+        </div>
+      </label>
     </div>
 
     <div class="button-section">
-      <button type="submit" [disabled]="!registrationForm.valid">Odoslať</button>
+      <button type="submit" [disabled] = "!registrationForm.valid">Odoslať</button>
       <span class="privacy-policy">
-     <input type="checkbox" ><span class="required">*</span>Súhlasím s podmienkami používania.
+        <input type="checkbox" formControlName="consent"><span class="required">*</span>Súhlasím s podmienkami používania.
      </span>
     </div>
   </form>

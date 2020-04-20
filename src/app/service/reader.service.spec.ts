@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 
-import { ReaderService } from './reader.service';
+import { ReaderService} from './reader.service';
 
 describe('ReaderService', () => {
   let service: ReaderService;

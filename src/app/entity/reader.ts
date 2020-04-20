@@ -2,7 +2,7 @@ import { Account } from './account';
 import { MemberCard } from './memberCard';
 import { Address } from './Address';
 
-export interface Reader {
+export class Reader {
   id: number;
   name: string;
   surname: string;
@@ -26,4 +26,8 @@ export interface Reader {
       href: string
     },
   };
+
+  constructor(values: Object = {}) {
+    Object.assign(this, values);
+  }
 }
