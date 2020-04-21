@@ -1,6 +1,6 @@
 import { Account } from './account';
 import { MemberCard } from './memberCard';
-import { Address } from './Address';
+import { Address } from './address';
 
 export class Reader {
   id: number;

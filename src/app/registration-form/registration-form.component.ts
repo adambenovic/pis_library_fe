@@ -3,6 +3,8 @@ import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {Reader} from '../entity/reader';
 import {ReaderService} from '../service/reader.service';
 import {MessageService} from '../service/message.service';
+import {ValidationService} from '../service/validation.service';
+import {ValidationObject} from '../entity/validationObject';
 
 @Component({
   selector: 'app-registration-form',
@@ -29,7 +31,11 @@ export class RegistrationFormComponent implements OnInit {
   get city() { return this.registrationForm.get('city'); }
   get zip() { return this.registrationForm.get('zip'); }
 
-  constructor(private readerService: ReaderService, private messageService: MessageService) { }
+  constructor(
+    private readerService: ReaderService,
+    private messageService: MessageService,
+    private validationService: ValidationService
+  ) { }
 
   ngOnInit(): void {
     this.registrationForm = new FormGroup({
@@ -43,12 +49,12 @@ export class RegistrationFormComponent implements OnInit {
       personal_identification_number: new FormControl('', [
         Validators.required,
         Validators.maxLength(10),
-        Validators.minLength(10)
+        Validators.minLength(10),
       ]),
       type: new FormControl(this.types[0], Validators.required),
       isic_number: new FormControl(''),
       email: new FormControl('', [Validators.required, Validators.email]),
-      phone: new FormControl('', Validators.pattern['\+421[0-9]{9}']),
+      phone: new FormControl('', Validators.pattern('\+421[0-9]{9}')),
       consent: new FormControl('', Validators.requiredTrue),
       address: new FormGroup({
         street: new FormControl('', Validators.required),
@@ -57,7 +63,7 @@ export class RegistrationFormComponent implements OnInit {
         zip: new FormControl('', [Validators.required, Validators.pattern('[0-9]{5}')]),
       })
     });
-    }
+  }
 
   onSubmit() {
     this.readerService.addReader(this.registrationForm.value as Reader).subscribe();
@@ -75,5 +81,15 @@ export class RegistrationFormComponent implements OnInit {
     else {
       this.isic_number.clearValidators();
     }
+  }
+
+  validateEmail(email: string) {
+    const type = 'email';
+    this.validationService.validate({email, type} as unknown as ValidationObject);
+  }
+
+  validatePhone(phone: string) {
+    const type = 'email';
+    this.validationService.validate({phone, type} as unknown as ValidationObject);
   }
 }
