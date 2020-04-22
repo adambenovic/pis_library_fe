@@ -9,7 +9,7 @@ import {catchError, tap} from 'rxjs/operators';
   providedIn: 'root'
 })
 export class ValidationService {
-  private validateUrl = 'http://localhost:8000/api/validate';
+  private validateUrl = 'http://localhost:8000/api/validation';
   httpOptions = {
     headers: new HttpHeaders({ 'Content-Type': 'application/json' })
   };

@@ -3,18 +3,39 @@
   <form [formGroup]="registrationForm" (ngSubmit)="onSubmit()">
     <div class="section"><span>1</span>Osobné údaje</div>
     <div class="inner-wrap">
-      <label>Meno:<span class="required">*</span><input type="text" formControlName="name"></label>
-      <label>Priezvisko:<span class="required">*</span><input type="text" formControlName="surname"></label>
-      <label>Dátum narodenia:<span class="required">*</span><input type="date" formControlName="dateOfBirth"></label>
-      <label>Rodné číslo:<span class="required">*</span><input type="text" formControlName="personalIdentificationNumber"></label>
+      <label>Meno:<span class="required">*</span><input type="text" formControlName="name">
+        <div *ngIf="name.invalid && name.touched" class="required">
+          <div *ngIf = "name.errors?.required">Meno nemôže byť prázdne!</div>
+        </div>
+      </label>
+      <label>Priezvisko:<span class="required">*</span><input type="text" formControlName="surname">
+        <div *ngIf="surname.invalid && surname.touched" class="required">
+          <div *ngIf = "surname.errors?.required">Priezvisko nemôže byť prázdne!</div>
+        </div>
+      </label>
+      <label>Dátum narodenia:<span class="required">*</span><input type="date" formControlName="date_of_birth">
+        <div *ngIf="date_of_birth.invalid && date_of_birth.touched" class="required">
+          <div *ngIf = "date_of_birth.errors?.required">Musíte zadať dátum narodenia!</div>
+        </div>
+      </label>
+      <label>Rodné číslo:<span class="required">*</span><input type="text" formControlName="personal_identification_number">
+        <div *ngIf="personal_identification_number.invalid && personal_identification_number.touched" class="required">
+          <div *ngIf = "personal_identification_number.errors">Rodné číslo má 9 alebo 10 číslic!</div>
+        </div>
+      </label>
       <label>Som:<span class="required">*</span>
-        <select (change)="changeType($event)"formControlName="type">
+        <select (change)="changeType($event)" formControlName="type">
           <option value="" disabled></option>
           <option *ngFor="let type of types" [ngValue]="type">{{type}}</option>
         </select>
       </label>
       <div *ngIf="selectedType == '2: Študent(držiteľ ISIC karty)'">
-        <label>Číslo karty ISIC:<span class="required">*</span><input type="text" formControlName="isicNumber"></label>
+        <label>Číslo karty ISIC:<span class="required">*</span><input type="text" formControlName="isic_number">
+          <div *ngIf="isic_number.invalid && isic_number.touched" class="required">
+            <div *ngIf = "isic_number.errors.maxlength || isic_number.errors.minlength">ISIC číslo má 10 znakov!</div>
+            <div *ngIf = "isic_number.errors?.required">ISIC číslo musí byť zadané!</div>
+          </div>
+        </label>
       </div>
     </div>
 
@@ -23,25 +44,28 @@
       <div class="inner-wrap">
         <label>Ulica:
           <span class="required">*</span><input type="text" formControlName="street">
-<!--          <div *ngIf="street.invalid && street.touched" class="required">-->
-<!--            <div *ngIf = "street.errors?.required">Ulica nemôže byť prázdna!</div>-->
-<!--          </div>-->
+          <div *ngIf="street.invalid && street.touched" class="required">
+            <div *ngIf = "street.errors?.required">Ulica nemôže byť prázdna!</div>
+          </div>
         </label>
         <label>Číslo:
           <span class="required">*</span><input type="text" formControlName="number">
-<!--          <div *ngIf="number.invalid && number.touched" class="required">-->
-<!--            <div *ngIf = "number.errors?.required">Číslo nemôže byť prázdne!</div>-->
-<!--          </div>-->
+          <div *ngIf="number.invalid && number.touched" class="required">
+            <div *ngIf = "number.errors?.required">Číslo nemôže byť prázdne!</div>
+          </div>
         </label>
         <label>PSČ:
           <span class="required">*</span><input type="text" formControlName="zip">
-<!--          <div *ngIf="zip.invalid && zip.touched" class="required">-->
-<!--            <div *ngIf = "zip.errors?.required">PSČ nemôže byť prázdne!</div>-->
-<!--            <div *ngIf = "zip.errors?.pattern">PSČ zadávajte bez medzery(5 čísel)!</div>-->
-<!--          </div>-->
+          <div *ngIf="zip.invalid && zip.touched" class="required">
+            <div *ngIf = "zip.errors?.required">PSČ nemôže byť prázdne!</div>
+            <div *ngIf = "zip.errors?.pattern">PSČ zadávajte bez medzery(5 čísel)!</div>
+          </div>
         </label>
         <label>Mesto:
           <span class="required">*</span><input type="text" formControlName="city">
+          <div *ngIf="city.invalid && city.touched" class="required">
+            <div *ngIf = "city.errors?.required">Mesto nemôže byť prázdne!</div>
+          </div>
         </label>
       </div>
     </div>
@@ -50,16 +74,14 @@
     <div class="inner-wrap">
       <label>E-mail:
         <span class="required">*</span><input type="text" formControlName="email">
-        <div *ngIf="email.invalid && email.touched" class="required">
+        <div *ngIf="email.invalid && email.dirty" class="required">
           <div *ngIf = "email.errors?.required">E-mail nemôže byť prázdny!</div>
-          <div *ngIf = "email.errors?.email">Nesprávny formát!</div>
+          <div *ngIf = "email.errors?.emailInvalid">Nesprávny formát!</div>
         </div>
       </label>
       <label>Telefón:
         <input type="text" formControlName="phone">
-<!--        <div *ngIf="phone.invalid && phone.touched" class="required">-->
-<!--          <div *ngIf = "phone.errors?.pattern">Nesprávny formát!</div>-->
-<!--        </div>-->
+        <div *ngIf="phone.invalid && phone.dirty" class="required">Nesprávny formát!</div>
       </label>
     </div>
 

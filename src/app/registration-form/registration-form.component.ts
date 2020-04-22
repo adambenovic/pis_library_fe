@@ -1,10 +1,12 @@
 import {Component, OnInit} from '@angular/core';
-import {FormControl, FormGroup, Validators} from '@angular/forms';
+import {AbstractControl, FormControl, FormGroup, ValidationErrors, Validators} from '@angular/forms';
 import {Reader} from '../entity/reader';
 import {ReaderService} from '../service/reader.service';
 import {MessageService} from '../service/message.service';
 import {ValidationService} from '../service/validation.service';
 import {ValidationObject} from '../entity/validationObject';
+import {Observable, of} from 'rxjs';
+import {catchError, map} from 'rxjs/operators';
 
 @Component({
   selector: 'app-registration-form',
@@ -26,10 +28,10 @@ export class RegistrationFormComponent implements OnInit {
   get email() { return this.registrationForm.get('email'); }
   get phone() { return this.registrationForm.get('phone'); }
   get consent() { return this.registrationForm.get('consent'); }
-  get street() { return this.registrationForm.get('street'); }
-  get number() { return this.registrationForm.get('number'); }
-  get city() { return this.registrationForm.get('city'); }
-  get zip() { return this.registrationForm.get('zip'); }
+  get street() { return this.registrationForm.get('address').get('street'); }
+  get number() { return this.registrationForm.get('address').get('number'); }
+  get city() { return this.registrationForm.get('address').get('city'); }
+  get zip() { return this.registrationForm.get('address').get('zip'); }
 
   constructor(
     private readerService: ReaderService,
@@ -41,20 +43,17 @@ export class RegistrationFormComponent implements OnInit {
     this.registrationForm = new FormGroup({
       name: new FormControl('', Validators.required),
       surname: new FormControl('', Validators.required),
-      date_of_birth: new FormControl('', [
-        Validators.required,
-        Validators.maxLength(10),
-        Validators.minLength(10)
-      ]),
+      date_of_birth: new FormControl('', Validators.required),
       personal_identification_number: new FormControl('', [
         Validators.required,
         Validators.maxLength(10),
-        Validators.minLength(10),
+        Validators.minLength(9),
+        Validators.pattern('^[0-9]{9,10}$')
       ]),
       type: new FormControl(this.types[0], Validators.required),
       isic_number: new FormControl(''),
-      email: new FormControl('', [Validators.required, Validators.email]),
-      phone: new FormControl('', Validators.pattern('\+421[0-9]{9}')),
+      email: new FormControl('', {updateOn: 'blur', validators: Validators.required, asyncValidators: this.validateEmail.bind(this)}),
+      phone: new FormControl('', {updateOn: 'blur', validators: Validators.required, asyncValidators: this.validatePhone.bind(this)}),
       consent: new FormControl('', Validators.requiredTrue),
       address: new FormGroup({
         street: new FormControl('', Validators.required),
@@ -70,7 +69,9 @@ export class RegistrationFormComponent implements OnInit {
   }
 
   changeType(e) {
+    this.isic_number.clearValidators();
     this.selectedType = e.target.value;
+    this.isic_number.setValue('');
     if (this.selectedType === '2: Študent(držiteľ ISIC karty)') {
       this.isic_number.setValidators([
         Validators.required,
@@ -78,18 +79,31 @@ export class RegistrationFormComponent implements OnInit {
         Validators.maxLength(10)
       ]);
     }
-    else {
-      this.isic_number.clearValidators();
-    }
   }
 
-  validateEmail(email: string) {
-    const type = 'email';
-    this.validationService.validate({email, type} as unknown as ValidationObject);
+  validateEmail(ctrl: AbstractControl): Promise<ValidationErrors | null> | Observable<ValidationErrors | null> {
+    const typeString = 'email';
+    const validationObject =  {
+      value: ctrl.value,
+      type: typeString
+    } as ValidationObject;
+
+    return this.validationService.validate(validationObject).pipe(
+      map(valid => valid.valid ? null : { emailInvalid: true }),
+      catchError(() => of(null))
+    );
   }
 
-  validatePhone(phone: string) {
-    const type = 'email';
-    this.validationService.validate({phone, type} as unknown as ValidationObject);
+  validatePhone(ctrl: AbstractControl): Promise<ValidationErrors | null> | Observable<ValidationErrors | null> {
+    const typeString = 'phone';
+    const validationObject =  {
+      value: ctrl.value,
+      type: typeString
+    } as ValidationObject;
+
+    return this.validationService.validate(validationObject).pipe(
+      map(valid => (valid.valid ? null : { phoneInvalid: true })),
+      catchError(() => of(null))
+    );
   }
 }
