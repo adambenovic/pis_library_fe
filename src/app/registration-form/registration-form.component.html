@@ -1,6 +1,7 @@
 <div class="form-style-10">
-  <h1>Registrácia čítateľa v knižnici</h1>
-  <form [formGroup]="registrationForm" (ngSubmit)="onSubmit()">
+  <h1 [hidden]="submitted">Registrácia čítateľa v knižnici</h1>
+  <h1 [hidden]="!submitted">Sumarizácia</h1>
+  <form [formGroup]="registrationForm" (ngSubmit)="onSubmit()" [hidden]="personal_identification_number.errors?.PINInvalid">
     <div class="section"><span>1</span>Osobné údaje</div>
     <div class="inner-wrap">
       <label>Meno:<span class="required">*</span><input type="text" formControlName="name">
@@ -28,9 +29,10 @@
           <option value="" disabled></option>
           <option *ngFor="let type of types" [ngValue]="type">{{type}}</option>
         </select>
+        Slúži pre výpočet členského poplatku
       </label>
       <div *ngIf="selectedType == '2: Študent(držiteľ ISIC karty)'">
-        <label>Číslo karty ISIC:<span class="required">*</span><input type="text" formControlName="isic_number">
+        <label>Číslo ISIC karty:<span class="required">*</span><input type="text" formControlName="isic_number">
           <div *ngIf="isic_number.invalid && isic_number.touched" class="required">
             <div *ngIf = "isic_number.errors.maxlength || isic_number.errors.minlength">ISIC číslo má 10 znakov!</div>
             <div *ngIf = "isic_number.errors?.required">ISIC číslo musí byť zadané!</div>
@@ -86,10 +88,14 @@
     </div>
 
     <div class="button-section">
-      <button type="submit" [disabled] = "!registrationForm.valid">Odoslať</button>
+      <button type="submit" [hidden]="submitted"  [disabled] = "!registrationForm.valid">Odoslať</button>
+      <button type="submit" [hidden]="!submitted" [disabled] = "!registrationForm.valid" (click)="sendToBackend">Potvrdiť</button>
       <span class="privacy-policy">
         <input type="checkbox" formControlName="consent"><span class="required">*</span>Súhlasím s podmienkami používania.
      </span>
     </div>
   </form>
+  <div *ngIf = "personal_identification_number.errors?.PINInvalid">
+    <span class="required">Čitateľ s rodným číslom {{personal_identification_number.value}} je už registrovaný!</span>
+  </div>
 </div>

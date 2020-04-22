@@ -14,10 +14,6 @@ import {catchError, map} from 'rxjs/operators';
   styleUrls: ['./registration-form.component.css']
 })
 export class RegistrationFormComponent implements OnInit {
-  types: string[] = ['Dospelý', 'Študent(držiteľ ISIC karty)', 'Dieťa(do 15 rokov)', 'ZŤP', 'Dôchodca'];
-  selectedType: string;
-
-  registrationForm: FormGroup;
 
   get name() { return this.registrationForm.get('name'); }
   get surname() { return this.registrationForm.get('surname'); }
@@ -38,6 +34,11 @@ export class RegistrationFormComponent implements OnInit {
     private messageService: MessageService,
     private validationService: ValidationService
   ) { }
+  types: string[] = ['Dospelý', 'Študent(držiteľ ISIC karty)', 'Dieťa(do 15 rokov)', 'ZŤP', 'Dôchodca'];
+  selectedType: string;
+  submitted: boolean;
+
+  registrationForm: FormGroup;
 
   ngOnInit(): void {
     this.registrationForm = new FormGroup({
@@ -65,6 +66,13 @@ export class RegistrationFormComponent implements OnInit {
   }
 
   onSubmit() {
+    this.submitted = true;
+    this.personal_identification_number.setAsyncValidators(this.validateDuplicity.bind(this));
+    this.personal_identification_number.updateValueAndValidity();
+    this.registrationForm.disable();
+  }
+
+  sendToBackend() {
     this.readerService.addReader(this.registrationForm.value as Reader).subscribe();
   }
 
@@ -103,6 +111,19 @@ export class RegistrationFormComponent implements OnInit {
 
     return this.validationService.validate(validationObject).pipe(
       map(valid => (valid.valid ? null : { phoneInvalid: true })),
+      catchError(() => of(null))
+    );
+  }
+
+  validateDuplicity(ctrl: AbstractControl): Promise<ValidationErrors | null> | Observable<ValidationErrors | null> {
+    const typeString = 'personal_identification_number';
+    const validationObject =  {
+      value: ctrl.value,
+      type: typeString
+    } as ValidationObject;
+
+    return this.validationService.validate(validationObject).pipe(
+      map(valid => valid.valid ? null : { PINInvalid: true }),
       catchError(() => of(null))
     );
   }
