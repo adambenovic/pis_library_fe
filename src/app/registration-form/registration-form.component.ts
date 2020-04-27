@@ -12,6 +12,8 @@ import {GeneratedFee} from '../entity/generatedFee';
 import {Router} from '@angular/router';
 import {PhotoService} from '../service/photo.service';
 import {FileUpload} from '../entity/uploadFile';
+import {NotificationService} from '../service/notification.service';
+import {NotifyObject} from '../entity/notifyObject';
 
 @Component({
   selector: 'app-registration-form',
@@ -44,7 +46,8 @@ export class RegistrationFormComponent implements OnInit {
     private validationService: ValidationService,
     private feeService: FeeService,
     private router: Router,
-    private fileUploadService: PhotoService
+    private fileUploadService: PhotoService,
+    private notificationService: NotificationService
   ) { }
   types: string[] = ['Dospelý', 'Študent(držiteľ ISIC karty)', 'Dieťa(do 15 rokov)', 'ZŤP', 'Dôchodca'];
   selectedType: string;
@@ -72,7 +75,7 @@ export class RegistrationFormComponent implements OnInit {
       type: new FormControl(this.types[0], Validators.required),
       isic_number: new FormControl(''),
       email: new FormControl('', {updateOn: 'blur', validators: Validators.required, asyncValidators: this.validateEmail.bind(this)}),
-      phone: new FormControl('', {updateOn: 'blur', validators: Validators.required, asyncValidators: this.validatePhone.bind(this)}),
+      phone: new FormControl('', {updateOn: 'blur', asyncValidators: this.validatePhone.bind(this)}),
       consent: new FormControl(''),
       accept: new FormControl(''),
       fee: new FormControl(''),
@@ -105,6 +108,10 @@ export class RegistrationFormComponent implements OnInit {
     this.readerService.addReader(this.registrationForm.value as Reader).subscribe(reader => this.reader = reader);
     this.registrationForm.disable();
     this.created = true;
+    this.notifyRegistration(this.email.value);
+    if (!this.phone.value.empty) {
+      this.notifyRegistration(this.phone.value);
+    }
   }
 
   changeType(e) {
@@ -133,6 +140,15 @@ export class RegistrationFormComponent implements OnInit {
       this.imgURL = reader.result;
     };
     this.uploaded = true;
+  }
+
+  notifyRegistration(contact: string) {
+    let notifyObject = new NotifyObject();
+    notifyObject.contact = contact;
+    notifyObject.subject = 'Registrácia do knižnice';
+    notifyObject.message = 'Vitajte v knžnici!';
+
+    this.notificationService.notify(notifyObject).subscribe();
   }
 
   validateEmail(ctrl: AbstractControl): Promise<ValidationErrors | null> | Observable<ValidationErrors | null> {
