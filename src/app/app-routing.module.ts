@@ -9,7 +9,7 @@ const routes: Routes = [
   { path: '', redirectTo: '/register', pathMatch: 'full' },
   { path: 'readers', component: ReadersComponent },
   { path: 'dashboard', component: DashboardComponent },
-  { path: 'detail/:id', component: ReaderDetailComponent },
+  { path: 'readers/detail/:id', component: ReaderDetailComponent },
   { path: 'register', component: RegistrationFormComponent }
 ];
 

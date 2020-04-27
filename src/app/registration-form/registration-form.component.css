@@ -87,6 +87,8 @@
   margin-top: -3px;
 }
 .form-style-10 button[type="submit"],
+.form-style-10 button[type="button"],
+.form-style-10 input[type="button"],
 .form-style-10 input[type="submit"]{
   background: #2A88AD;
   padding: 8px 20px 8px 20px;
@@ -103,6 +105,7 @@
   font-size: 15px;
 }
 .form-style-10 button:hover,
+.form-style-10 input[type="button"]:hover,
 .form-style-10 input[type="submit"]:hover{
   background: #2A6881;
   -moz-box-shadow: inset 0px 2px 2px 0px rgba(255, 255, 255, 0.28);

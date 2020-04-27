@@ -7,6 +7,9 @@ import {ValidationService} from '../service/validation.service';
 import {ValidationObject} from '../entity/validationObject';
 import {Observable, of} from 'rxjs';
 import {catchError, map} from 'rxjs/operators';
+import {FeeService} from '../service/fee.service';
+import {GeneratedFee} from '../entity/generatedFee';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-registration-form',
@@ -24,6 +27,8 @@ export class RegistrationFormComponent implements OnInit {
   get email() { return this.registrationForm.get('email'); }
   get phone() { return this.registrationForm.get('phone'); }
   get consent() { return this.registrationForm.get('consent'); }
+  get accept() { return this.registrationForm.get('accept'); }
+  get fee() { return this.registrationForm.get('fee'); }
   get street() { return this.registrationForm.get('address').get('street'); }
   get number() { return this.registrationForm.get('address').get('number'); }
   get city() { return this.registrationForm.get('address').get('city'); }
@@ -32,13 +37,18 @@ export class RegistrationFormComponent implements OnInit {
   constructor(
     private readerService: ReaderService,
     private messageService: MessageService,
-    private validationService: ValidationService
+    private validationService: ValidationService,
+    private feeService: FeeService,
+    private router: Router
   ) { }
   types: string[] = ['Dospelý', 'Študent(držiteľ ISIC karty)', 'Dieťa(do 15 rokov)', 'ZŤP', 'Dôchodca'];
   selectedType: string;
   submitted: boolean;
-
+  created: boolean;
   registrationForm: FormGroup;
+  reader: Reader;
+
+  generatedFee: GeneratedFee = new GeneratedFee();
 
   ngOnInit(): void {
     this.registrationForm = new FormGroup({
@@ -55,7 +65,9 @@ export class RegistrationFormComponent implements OnInit {
       isic_number: new FormControl(''),
       email: new FormControl('', {updateOn: 'blur', validators: Validators.required, asyncValidators: this.validateEmail.bind(this)}),
       phone: new FormControl('', {updateOn: 'blur', validators: Validators.required, asyncValidators: this.validatePhone.bind(this)}),
-      consent: new FormControl('', Validators.requiredTrue),
+      consent: new FormControl(''),
+      accept: new FormControl(''),
+      fee: new FormControl(''),
       address: new FormGroup({
         street: new FormControl('', Validators.required),
         number: new FormControl('', Validators.required),
@@ -70,10 +82,19 @@ export class RegistrationFormComponent implements OnInit {
     this.personal_identification_number.setAsyncValidators(this.validateDuplicity.bind(this));
     this.personal_identification_number.updateValueAndValidity();
     this.registrationForm.disable();
+    this.feeService.getFee(this.type.value).subscribe(generatedFee => this.generatedFee = generatedFee);
+    this.fee.disable();
+    this.consent.enable();
+    this.accept.enable();
+    this.consent.setValidators(Validators.required);
+    this.accept.setValidators(Validators.required);
   }
 
   sendToBackend() {
-    this.readerService.addReader(this.registrationForm.value as Reader).subscribe();
+    this.registrationForm.enable();
+    this.readerService.addReader(this.registrationForm.value as Reader).subscribe(reader => this.reader = reader);
+    this.registrationForm.disable();
+    this.created = true;
   }
 
   changeType(e) {
@@ -126,5 +147,9 @@ export class RegistrationFormComponent implements OnInit {
       map(valid => valid.valid ? null : { PINInvalid: true }),
       catchError(() => of(null))
     );
+  }
+
+  redirectToHP() {
+    this.router.navigate(['/readers/detail', this.reader.id]);
   }
 }

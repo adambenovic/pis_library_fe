@@ -1,7 +1,8 @@
 <div class="form-style-10">
-  <h1 [hidden]="submitted">Registrácia čítateľa v knižnici</h1>
-  <h1 [hidden]="!submitted">Sumarizácia</h1>
-  <form [formGroup]="registrationForm" (ngSubmit)="onSubmit()" [hidden]="personal_identification_number.errors?.PINInvalid">
+  <h1 [hidden]="submitted || created">Registrácia čítateľa v knižnici</h1>
+  <h1 [hidden]="!submitted || created">Sumarizácia</h1>
+  <h1 [hidden]="!created">Ďakujeme!</h1>
+  <form [formGroup]="registrationForm" (ngSubmit)="onSubmit()" [hidden]="personal_identification_number.errors?.PINInvalid || created">
     <div class="section"><span>1</span>Osobné údaje</div>
     <div class="inner-wrap">
       <label>Meno:<span class="required">*</span><input type="text" formControlName="name">
@@ -87,15 +88,32 @@
       </label>
     </div>
 
+    <div [hidden]="!submitted">
+      <div class="section"><span>4</span>Členský poplatok</div>
+      <div class="inner-wrap">
+        <label>Vygenerovaný poplatok - po {{generatedFee.percentage}}% zľave:
+          <input type="number" value="{{generatedFee.amount | number:'1.2-2'}}" formControlName="fee">
+        </label>
+        <span class="privacy-policy"><input type="checkbox" formControlName="accept"><span class="required">*</span>Súhlasím so zaplatením poplatku</span>
+        <span class="privacy-policy"><input type="checkbox" formControlName="consent"><span class="required">*</span>Súhlasím s podmienkami používania</span>
+      </div>
+    </div>
+
     <div class="button-section">
       <button type="submit" [hidden]="submitted"  [disabled] = "!registrationForm.valid">Odoslať</button>
-      <button type="submit" [hidden]="!submitted" [disabled] = "!registrationForm.valid" (click)="sendToBackend">Potvrdiť</button>
-      <span class="privacy-policy">
-        <input type="checkbox" formControlName="consent"><span class="required">*</span>Súhlasím s podmienkami používania.
-     </span>
+      <button type="button" [hidden]="!submitted" [disabled] = "!registrationForm.valid" (click)="sendToBackend()">Potvrdiť registráciu</button>
     </div>
   </form>
   <div *ngIf = "personal_identification_number.errors?.PINInvalid">
     <span class="required">Čitateľ s rodným číslom {{personal_identification_number.value}} je už registrovaný!</span>
+    <div class="button-section">
+      <button type="button" (click)="redirectToHP()">Spät na hlavnú stránku</button>
+    </div>
+  </div>
+  <div [hidden]="!created">
+    Vaša registrácia bola úspešná a na váš e-mail {{email.value}} boli odoslané ďalšie pokyny.
+    <div class="button-section">
+     <button type="button" (click)="redirectToHP()">Spät na hlavnú stránku</button>
+    </div>
   </div>
 </div>
