@@ -43,6 +43,7 @@
   margin-bottom: 15px;
 }
 .form-style-10 input[type="text"],
+.form-style-10 input[type="file"],
 .form-style-10 input[type="date"],
 .form-style-10 input[type="datetime"],
 .form-style-10 input[type="email"],
