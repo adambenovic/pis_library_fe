@@ -73,7 +73,7 @@ export class RegistrationFormComponent implements OnInit {
         Validators.pattern('^[0-9]{9,10}$')
       ]),
       type: new FormControl(this.types[0], Validators.required),
-      isic_number: new FormControl(''),
+      isic_number: new FormControl('', {updateOn: 'blur'}),
       email: new FormControl('', {updateOn: 'blur', validators: Validators.required, asyncValidators: this.validateEmail.bind(this)}),
       phone: new FormControl('', {updateOn: 'blur', asyncValidators: this.validatePhone.bind(this)}),
       consent: new FormControl(''),
@@ -119,11 +119,8 @@ export class RegistrationFormComponent implements OnInit {
     this.selectedType = e.target.value;
     this.isic_number.setValue('');
     if (this.selectedType === '2: Študent(držiteľ ISIC karty)') {
-      this.isic_number.setValidators([
-        Validators.required,
-        Validators.minLength(10),
-        Validators.maxLength(10)
-      ]);
+      this.isic_number.setValidators(Validators.required);
+      this.isic_number.setAsyncValidators(this.validateISIC.bind(this));
     }
   }
 
@@ -143,7 +140,7 @@ export class RegistrationFormComponent implements OnInit {
   }
 
   notifyRegistration(contact: string) {
-    let notifyObject = new NotifyObject();
+    const notifyObject = new NotifyObject();
     notifyObject.contact = contact;
     notifyObject.subject = 'Registrácia do knižnice';
     notifyObject.message = 'Vitajte v knžnici!';
@@ -186,6 +183,19 @@ export class RegistrationFormComponent implements OnInit {
 
     return this.validationService.validate(validationObject).pipe(
       map(valid => valid.valid ? null : { PINInvalid: true }),
+      catchError(() => of(null))
+    );
+  }
+
+  validateISIC(ctrl: AbstractControl): Promise<ValidationErrors | null> | Observable<ValidationErrors | null> {
+    const typeString = 'isic';
+    const validationObject =  {
+      value: ctrl.value,
+      type: typeString
+    } as ValidationObject;
+
+    return this.validationService.validate(validationObject).pipe(
+      map(valid => valid.valid ? null : { isicInvalid: true }),
       catchError(() => of(null))
     );
   }

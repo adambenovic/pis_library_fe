@@ -36,8 +36,8 @@
       <div *ngIf="selectedType == '2: Študent(držiteľ ISIC karty)'">
         <label>Číslo ISIC karty:<span class="required">*</span><input type="text" formControlName="isic_number">
           <div *ngIf="isic_number.invalid && isic_number.touched" class="required">
-            <div *ngIf = "isic_number.errors.maxlength || isic_number.errors.minlength">ISIC číslo má 10 znakov!</div>
             <div *ngIf = "isic_number.errors?.required">ISIC číslo musí byť zadané!</div>
+            <div *ngIf = "isic_number.errors?.isicInvalid">Neplatný ISIC!</div>
           </div>
         </label>
       </div>
