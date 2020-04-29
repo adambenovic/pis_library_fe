@@ -4,6 +4,7 @@ import {MessageService} from './message.service';
 import {Observable, of} from 'rxjs';
 import {catchError} from 'rxjs/operators';
 import {GeneratedFee} from '../entity/generatedFee';
+import {ReaderService} from './reader.service';
 
 @Injectable({
   providedIn: 'root'
@@ -13,28 +14,11 @@ export class FeeService {
 
   private feeUrl = 'http://localhost:8000/api/fee';
 
-  constructor(private messageService: MessageService, private http: HttpClient) { }
+  constructor(private messageService: MessageService, private http: HttpClient, private readerService: ReaderService) { }
 
   getFee(type: string): Observable<GeneratedFee> {
     const url = this.feeUrl + '/generate';
-    switch (type) {
-      case 'Dospelý':
-        type = 'adult';
-        break;
-      case 'Študent(držiteľ ISIC karty)':
-        type = 'student';
-        break;
-      case 'Dieťa(do 15 rokov)':
-        type = 'kid';
-        break;
-      case 'ZŤP':
-        type = 'ztp';
-        break;
-      case 'Dôchodca':
-        type = 'kid';
-        break;
-    }
-
+    type = this.readerService.mapType(type);
     return this.http.get<GeneratedFee>(url, { headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
       params: new HttpParams().set('type', type)}).pipe(
       catchError(this.handleError<GeneratedFee>('validationObject'))

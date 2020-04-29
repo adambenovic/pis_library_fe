@@ -73,9 +73,9 @@ export class RegistrationFormComponent implements OnInit {
         Validators.pattern('^[0-9]{9,10}$')
       ]),
       type: new FormControl(this.types[0], Validators.required),
-      isic_number: new FormControl('', {updateOn: 'blur'}),
-      email: new FormControl('', {updateOn: 'blur', validators: Validators.required, asyncValidators: this.validateEmail.bind(this)}),
-      phone: new FormControl('', {updateOn: 'blur', asyncValidators: this.validatePhone.bind(this)}),
+      isic_number: new FormControl(''),
+      email: new FormControl('', {validators: Validators.required, asyncValidators: this.validateEmail.bind(this)}),
+      phone: new FormControl('', {asyncValidators: this.validatePhone.bind(this)}),
       consent: new FormControl(''),
       accept: new FormControl(''),
       fee: new FormControl(''),
@@ -101,10 +101,12 @@ export class RegistrationFormComponent implements OnInit {
     this.accept.enable();
     this.consent.setValidators(Validators.required);
     this.accept.setValidators(Validators.required);
+    window.scrollTo(0, 0);
   }
 
   sendToBackend() {
     this.registrationForm.enable();
+    this.type.setValue(this.readerService.mapType(this.type.value));
     this.readerService.addReader(this.registrationForm.value as Reader).subscribe(reader => this.reader = reader);
     this.registrationForm.disable();
     this.created = true;

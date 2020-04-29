@@ -18,6 +18,6 @@ export class DashboardComponent implements OnInit {
 
   getReaders(): void {
     this.readerService.getReaders()
-      .subscribe(readers => this.readers = readers.slice(1, 5));
+      .subscribe(readers => this.readers = readers);
   }
 }

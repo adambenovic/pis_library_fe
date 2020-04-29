@@ -1,8 +1,55 @@
-<nav>
-  <a routerLink="/dashboard">Dashboard</a>
-  <a routerLink="/readers">Readers</a>
-  <a routerLink="/register">Register</a>
-</nav>
+<div id="blog" class="container">
+  <div class="row">
+    <div class="col-md-12">
+      <header id="header">
+        <h2>
+          <a routerLink="/" style="color:#105ea0">{{ title }}</a>
+        </h2>
+      </header>
+    </div>
+  </div>
 
-<router-outlet></router-outlet>
-<!--<app-messages></app-messages>-->
+  <nav class="navbar navbar-default" role="navigation">
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-simples">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" routerLink="/" style="color:#105ea0">
+          Homepage
+        </a>
+      </div>
+
+      <div class="collapse navbar-collapse" id="navbar-simples">
+        <ul class="nav navbar-nav">
+          <li>
+            <a routerLink="/register" style="color:#337ab7">
+              Registrácia
+            </a>
+          </li>
+          <li>
+            <a routerLink="/dashboard" style="color:#337ab7">
+              Správa čitateľov
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <div id="page-container">
+    <div id="content-wrap">
+      <router-outlet></router-outlet>
+    </div>
+  </div>
+  <div class="panel panel-default">
+    <div class="panel-footer">
+      <div id="footerInfo" class="text-center">
+        &copy; 2020
+      </div>
+    </div>
+  </div>
+</div>

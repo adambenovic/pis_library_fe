@@ -10,6 +10,7 @@ import { MessagesComponent } from './messages/messages.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { HttpClientModule } from '@angular/common/http';
 import { RegistrationFormComponent } from './registration-form/registration-form.component';
+import { HomepageComponent } from './homepage/homepage.component';
 
 @NgModule({
   declarations: [
@@ -18,7 +19,8 @@ import { RegistrationFormComponent } from './registration-form/registration-form
     ReaderDetailComponent,
     MessagesComponent,
     DashboardComponent,
-    RegistrationFormComponent
+    RegistrationFormComponent,
+    HomepageComponent
   ],
   imports: [
     BrowserModule,

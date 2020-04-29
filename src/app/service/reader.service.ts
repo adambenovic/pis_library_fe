@@ -63,6 +63,28 @@ export class ReaderService {
     );
   }
 
+  mapType(type) {
+    switch (type) {
+      case 'Dospelý':
+        type = 'adult';
+        break;
+      case 'Študent(držiteľ ISIC karty)':
+        type = 'student';
+        break;
+      case 'Dieťa(do 15 rokov)':
+        type = 'kid';
+        break;
+      case 'ZŤP':
+        type = 'ztp';
+        break;
+      case 'Dôchodca':
+        type = 'kid';
+        break;
+    }
+
+    return type;
+  }
+
   private log(message: string) {
     this.messageService.add(`ReaderService: ${message}`);
   }
