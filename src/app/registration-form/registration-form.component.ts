@@ -203,6 +203,7 @@ export class RegistrationFormComponent implements OnInit {
   }
 
   redirectToHP() {
-    this.router.navigate(['/readers/detail', this.reader.id]);
+    this.router.navigate(['']);
+    window.scrollTo(0, 0);
   }
 }

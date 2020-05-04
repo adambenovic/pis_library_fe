@@ -9,7 +9,7 @@ import { Reader } from '../entity/reader';
 })
 export class DashboardComponent implements OnInit {
   readers: Reader[] = [];
-
+  searchText;
   constructor(private readerService: ReaderService) { }
 
   ngOnInit() {
@@ -19,5 +19,9 @@ export class DashboardComponent implements OnInit {
   getReaders(): void {
     this.readerService.getReaders()
       .subscribe(readers => this.readers = readers);
+  }
+
+  sortedReadersBy(prop: string) {
+    return this.readers.sort((a, b) => a[prop] > b[prop] ? 1 : a[prop] === b[prop] ? 0 : -1);
   }
 }

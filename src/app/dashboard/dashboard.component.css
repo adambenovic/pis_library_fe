@@ -1,8 +1,6 @@
 /* DashboardComponent's private CSS styles */
 [class*='col-'] {
   float: left;
-  padding-right: 20px;
-  padding-bottom: 20px;
 }
 [class*='col-']:last-of-type {
   padding-right: 0;
@@ -15,9 +13,20 @@ a {
   -moz-box-sizing: border-box;
   box-sizing: border-box;
 }
+h1 {
+  color: #337ab7;
+  font-family: 'Roboto Light', cursive;
+  font-size: 48px;
+  text-align: left;
+  line-height: 90px;
+}
+h2 {
+  font-family: 'Roboto Light', cursive;
+  font-size: 32px;
+  text-align: center;
+}
 h3 {
   text-align: center;
-  margin-bottom: 0;
 }
 h4 {
   position: relative;
@@ -25,17 +34,20 @@ h4 {
 .grid {
   margin: 0;
 }
-.col-0-4 {
-  width: 25%;
+.list {
+  padding: 20px;
+}
+.col-0-3 {
+  width: 33%;
 }
 .module {
   padding: 20px;
-  text-align: center;
+  text-align: justify;
   color: #eee;
   max-height: 120px;
   min-width: 120px;
   background-color: #3f525c;
-  border-radius: 2px;
+  border-radius: 4px;
 }
 .module:hover {
   background-color: #eee;
@@ -49,6 +61,18 @@ h4 {
 .grid-pad > [class*='col-']:last-of-type {
   padding-right: 20px;
   display: block;
+}
+.search {
+  max-width: 500px;
+  padding-bottom: 50px;
+  margin:auto;
+}
+
+.form-control {
+  box-shadow: 0 10px 40px 0 #B0C1D9;
+}
+.form-control::placeholder  {
+  font-family: FontAwesome;
 }
 @media (max-width: 600px) {
   .module {

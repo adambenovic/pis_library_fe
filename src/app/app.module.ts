@@ -11,6 +11,8 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { HttpClientModule } from '@angular/common/http';
 import { RegistrationFormComponent } from './registration-form/registration-form.component';
 import { HomepageComponent } from './homepage/homepage.component';
+import { Ng2SearchPipeModule } from 'ng2-search-filter'
+
 
 @NgModule({
   declarations: [
@@ -28,6 +30,7 @@ import { HomepageComponent } from './homepage/homepage.component';
     FormsModule,
     HttpClientModule,
     ReactiveFormsModule,
+    Ng2SearchPipeModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

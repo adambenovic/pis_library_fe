@@ -1,8 +1,22 @@
-<h1>Zoznam užívateľov</h1>
+<h1>Zoznam čitateľov</h1>
+<div class="search">
+  <input class="form-control" type="text" name="search" [(ngModel)]="searchText" autocomplete="off" placeholder="&#61442;  Vyhľadávanie podľa mena priezviska alebo rodného čísla">
+</div>
+<h2 class="col-0-3">Priezvisko</h2>
+<h2 class="col-0-3">Meno</h2>
+<h2 class="col-0-3">Rodné číslo</h2>
 <div class="grid grid-pad">
-  <a *ngFor="let reader of readers" class="col-0-4" routerLink="/readers/detail/{{reader.id}}">
+  <a *ngFor="let reader of sortedReadersBy('surname') | filter:searchText" class="list" routerLink="/readers/detail/{{reader.id}}">
     <div class="module reader">
-      <h4>{{reader.name + " " + reader.surname}}</h4>
+      <div class="col-0-3">
+        <h3>{{reader.surname}}</h3>
+      </div>
+      <div class="col-0-3">
+        <h3>{{reader.name}}</h3>
+      </div>
+      <div class="col-0-3">
+        <h3>{{reader.personal_identification_number}}</h3>
+      </div>
     </div>
   </a>
 </div>
