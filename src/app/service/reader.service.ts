@@ -5,6 +5,7 @@ import { MessageService} from './message.service';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { catchError, map, tap } from 'rxjs/operators';
 import {ReaderList} from '../entity/readerList';
+import {Fee} from '../entity/fee';
 
 @Injectable({
   providedIn: 'root'
@@ -33,6 +34,14 @@ export class ReaderService {
     return this.http.get<Reader>(url).pipe(
       tap(_ => this.log(`fetched reader id=${id}`)),
       catchError(this.handleError<Reader>(`getReader id=${id}`))
+    );
+  }
+
+  getReaderFees(id: number): Observable<Fee[]> {
+    const url = `${this.readersUrl}/${id}/fee`;
+    return this.http.get<Fee[]>(url).pipe(
+      tap(_ => this.log(`fetched reader id=${id} fees`)),
+      catchError(this.handleError<Fee[]>(`getReaderFees id=${id}`))
     );
   }
 
@@ -78,7 +87,29 @@ export class ReaderService {
         type = 'ztp';
         break;
       case 'Dôchodca':
-        type = 'kid';
+        type = 'retiree';
+        break;
+    }
+
+    return type;
+  }
+
+  reMapType(type) {
+    switch (type) {
+      case 'adult':
+        type = 'Dospelý';
+        break;
+      case 'student':
+        type = 'Študent(držiteľ ISIC karty)';
+        break;
+      case 'kid':
+        type = 'Dieťa(do 15 rokov)';
+        break;
+      case 'ztp':
+        type = 'ZŤP';
+        break;
+      case 'retiree':
+        type = 'Dôchodca';
         break;
     }
 

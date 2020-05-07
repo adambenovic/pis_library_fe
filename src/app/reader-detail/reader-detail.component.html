@@ -1,14 +1,146 @@
-<div *ngIf="reader">
+<div class="form-style-10">
+  <form [formGroup]="registrationForm">
 
-  <h2>{{reader.name + " " + reader.surname | uppercase}} Details</h2>
-  <div><span>id: </span>{{reader.id}}</div>
-  <div>
-    <label>name:
-      <input [(ngModel)]="reader.name + ' ' + reader.surname" placeholder="name"/>
-    </label>
-  </div>
+    <div class="section"><span>1</span>Osobné údaje</div>
+    <div class="inner-wrap">
+      <label>Meno:<span class="required">*</span><input type="text" formControlName="name" [(ngModel)]="reader.name">
+        <div *ngIf="name.invalid && name.touched" class="required">
+          <div *ngIf = "name.errors?.required">Meno nemôže byť prázdne!</div>
+        </div>
+      </label>
+      <label>Priezvisko:<span class="required">*</span><input type="text" formControlName="surname" [(ngModel)]="reader.surname">
+        <div *ngIf="surname.invalid && surname.touched" class="required">
+          <div *ngIf = "surname.errors?.required">Priezvisko nemôže byť prázdne!</div>
+        </div>
+      </label>
+      <label>Dátum narodenia:<span class="required">*</span><input type="date" formControlName="date_of_birth" [ngModel] ="reader.date_of_birth | date:'yyyy-MM-dd'">
+        <div *ngIf="date_of_birth.invalid && date_of_birth.touched" class="required">
+          <div *ngIf = "date_of_birth.errors?.required">Musíte zadať dátum narodenia!</div>
+        </div>
+      </label>
+      <label>Rodné číslo:<span class="required">*</span><input type="text" formControlName="personal_identification_number" [(ngModel)]="reader.personal_identification_number">
+        <div *ngIf="personal_identification_number.invalid && personal_identification_number.touched" class="required">
+          <div *ngIf = "personal_identification_number.errors">Rodné číslo má 9 alebo 10 číslic!</div>
+        </div>
+      </label>
+      <label>Som:<span class="required">*</span>
+        <select (change)="changeType($event)" formControlName="type" [(ngModel)]="reader.type">
+          <option value="adult">Dospelý</option>
+          <option value="student">Študent(držiteľ ISIC karty)</option>
+          <option value="kid">Dieťa(do 15 rokov)</option>
+          <option value="ztp">ZŤP</option>
+          <option value="retiree">Dôchodca</option>
+        </select>
+        Slúži pre výpočet členského poplatku
+      </label>
+      <div *ngIf="selectedType == 'student'">
+        <label>Číslo ISIC karty:<span class="required">*</span><input type="text" formControlName="isic_number" [(ngModel)]="reader.isic_number">
+          <div *ngIf="isic_number.invalid && isic_number.touched" class="required">
+            <div *ngIf = "isic_number.errors?.required">ISIC číslo musí byť zadané!</div>
+            <div *ngIf = "isic_number.errors?.isicInvalid">Neplatný ISIC!</div>
+          </div>
+        </label>
+      </div>
+      <label>Fotografia:<span class="required">*</span><br>
+        <img class="images" [src]="imgURL" alt="photo" height="150" [hidden]="!uploaded"/>
+        <br [hidden]="!uploaded">
+        <button type="button" (click)="fileInput.click()">
+          <span>Vyberte fotografiu</span>
+          <input #fileInput formControlName="photo" type="file" (change)="fileChange($event)" style="display:none;" accept=".jpg,.jpeg,.png"/>
+        </button>
+        <br>
+        <span>Nahrávajte fotografie do veľkosti 10MB, formát .jpg, .jpeg, .png.</span>
+        <div *ngIf="photo.invalid && photo.touched" class="required">
+          <div *ngIf = "photo.errors?.required">Musíte nahrať fotografiu!</div>
+        </div>
+      </label>
+    </div>
 
+    <div formGroupName="address">
+      <div class="section"><span>2</span>Adresa</div>
+      <div class="inner-wrap">
+        <label>Ulica:
+          <input type="text" formControlName="street" [(ngModel)]="reader.address.street">
+        </label>
+        <label>Číslo:
+          <span class="required">*</span><input type="text" formControlName="number" [(ngModel)]="reader.address.number">
+          <div *ngIf="number.invalid && number.touched" class="required">
+            <div *ngIf = "number.errors?.required">Číslo nemôže byť prázdne!</div>
+          </div>
+        </label>
+        <label>PSČ:
+          <span class="required">*</span><input type="text" formControlName="zip" [(ngModel)]="reader.address.zip">
+          <div *ngIf="zip.invalid && zip.touched" class="required">
+            <div *ngIf = "zip.errors?.required">PSČ nemôže byť prázdne!</div>
+            <div *ngIf = "zip.errors?.pattern">PSČ zadávajte bez medzery(5 čísel)!</div>
+          </div>
+        </label>
+        <label>Mesto:
+          <span class="required">*</span><input type="text" formControlName="city" [(ngModel)]="reader.address.city">
+          <div *ngIf="city.invalid && city.touched" class="required">
+            <div *ngIf = "city.errors?.required">Mesto nemôže byť prázdne!</div>
+          </div>
+        </label>
+      </div>
+    </div>
+
+    <div class="section"><span>3</span>Kontaktné údaje</div>
+    <div class="inner-wrap">
+      <label>E-mail:
+        <span class="required">*</span><input type="text" formControlName="email" [(ngModel)]="reader.email">
+        <div *ngIf="email.invalid && email.dirty" class="required">
+          <div *ngIf = "email.errors?.required">E-mail nemôže byť prázdny!</div>
+          <div *ngIf = "email.errors?.emailInvalid">Nesprávny formát!</div>
+        </div>
+      </label>
+      <label>Telefón:
+        <input type="text" formControlName="phone" [(ngModel)]="reader.phone">
+        <div *ngIf="phone.invalid && phone.dirty" class="required">Nesprávny formát!</div>
+      </label>
+    </div>
+
+    <div>
+      <div class="section"><span>4</span>Členské poplatky</div>
+      <div class="inner-wrap">
+        <div>
+          <div class="col-0-4">
+            <h3>Suma</h3>
+          </div>
+          <div class="col-0-4">
+            <h3>Platný od</h3>
+          </div>
+          <div class="col-0-4">
+            <h3>Platný do</h3>
+          </div>
+          <div class="col-4-4">
+            <h3>Zaplatený</h3>
+          </div>
+        </div>
+        <div class="grid grid-pad">
+          <a *ngFor="let fee of fees" class="list">
+            <div class="module reader">
+              <div class="col-0-4">
+                <h3>{{fee.amount}}</h3>
+              </div>
+              <div class="col-0-4">
+                <h3>{{fee.valid_from}}</h3>
+              </div>
+              <div class="col-0-4">
+                <h3>{{fee.valid_to}}</h3>
+              </div>
+              <div class="col-4-4">
+                <h3>{{fee.paid}}</h3>
+              </div>
+            </div>
+          </a>
+        </div>
+      </div>
+    </div>
+    <div class="button-section">
+    <button (click)="save()">Uložiť zmeny</button>
+    <button (click)="goBack()">Vrátiť sa</button>
+    <button (click)="aprove()">Schváliť</button>
+    <button (click)="refuse()">Zamietnuť</button>
+    </div>
+  </form>
 </div>
-
-<button (click)="save()">save</button>
-<button (click)="goBack()">go back</button>
