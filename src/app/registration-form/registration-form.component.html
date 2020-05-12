@@ -23,7 +23,7 @@
       </label>
       <label>Rodné číslo:<span class="required">*</span><input type="text" formControlName="personal_identification_number">
         <div *ngIf="personal_identification_number.invalid && personal_identification_number.touched" class="required">
-          <div *ngIf = "personal_identification_number.errors">Rodné číslo má 9 alebo 10 číslic!</div>
+          <div *ngIf = "personal_identification_number.errors">Rodné číslo musí mať 9 alebo 10 číslic!</div>
         </div>
       </label>
       <label>Som:<span class="required">*</span>
@@ -31,7 +31,7 @@
           <option value="" disabled></option>
           <option *ngFor="let type of types" [ngValue]="type">{{type}}</option>
         </select>
-        Slúži pre výpočet členského poplatku
+        <span [hidden]="submitted"> Slúži pre výpočet členského poplatku</span>
       </label>
       <div *ngIf="selectedType == '2: Študent(držiteľ ISIC karty)'">
         <label>Číslo ISIC karty:<span class="required">*</span><input type="text" formControlName="isic_number">
@@ -44,12 +44,12 @@
       <label>Fotografia:<span class="required">*</span><br>
         <img class="images" [src]="imgURL" alt="photo" height="150" [hidden]="!uploaded"/>
         <br [hidden]="!uploaded">
-        <button type="button" (click)="fileInput.click()">
-          <span>Vyberte fotografiu</span>
+        <button type="button" (click)="fileInput.click()" [hidden]="submitted">
+          Vyberte fotografiu
           <input #fileInput formControlName="photo" type="file" (change)="fileChange($event)" style="display:none;" accept=".jpg,.jpeg,.png"/>
         </button>
         <br>
-        <span>Nahrávajte fotografie do veľkosti 10MB, formát .jpg, .jpeg, .png.</span>
+        <span [hidden]="submitted">Nahrávajte fotografie do veľkosti 10MB, formát .jpg, .jpeg, .png.</span>
         <div *ngIf="photo.invalid && photo.touched" class="required">
           <div *ngIf = "photo.errors?.required">Musíte nahrať fotografiu!</div>
         </div>
@@ -88,14 +88,14 @@
     <div class="inner-wrap">
       <label>E-mail:
         <span class="required">*</span><input type="text" formControlName="email">
-        <div *ngIf="email.invalid && email.dirty" class="required">
+        <div *ngIf="email.invalid && email.touched" class="required">
           <div *ngIf = "email.errors?.required">E-mail nemôže byť prázdny!</div>
           <div *ngIf = "email.errors?.emailInvalid">Nesprávny formát!</div>
         </div>
       </label>
       <label>Telefón:
         <input type="text" formControlName="phone">
-        <div *ngIf="phone.invalid && phone.dirty" class="required">Nesprávny formát!</div>
+        <div *ngIf="phone.errors?.phoneInvalid && phone.touched" class="required">Nesprávny formát!</div>
       </label>
     </div>
 
@@ -105,14 +105,19 @@
         <label>Vygenerovaný poplatok - po {{generatedFee.percentage}}% zľave:
           <input type="number" value="{{generatedFee.amount | number:'1.2-2'}}" formControlName="fee">
         </label>
-        <span class="privacy-policy"><input type="checkbox" formControlName="accept"><span class="required">*</span>Súhlasím so zaplatením poplatku</span>
-        <span class="privacy-policy"><input type="checkbox" formControlName="consent"><span class="required">*</span>Súhlasím s podmienkami používania</span>
       </div>
     </div>
 
-    <div class="button-section">
-      <button type="submit" [hidden]="submitted"  [disabled] = "!registrationForm.valid">Odoslať</button>
-      <button type="button" [hidden]="!submitted" [disabled] = "!registrationForm.valid" (click)="sendToBackend()">Potvrdiť registráciu</button>
+    <div class="inner-wrap">
+      <div [hidden]="!submitted">
+        <span class="privacy-policy"><input type="checkbox" formControlName="accept"><span class="required">*</span>Súhlasím so zaplatením poplatku</span><br>
+        <span class="privacy-policy"><input type="checkbox" formControlName="consent"><span class="required">*</span>Súhlasím s podmienkami používania</span>
+      </div>
+      <div class="button-section">
+        <button type="submit" [hidden]="submitted">Odoslať</button>
+        <button type="button" [hidden]="!submitted" [disabled] = "!registrationForm.valid" (click)="sendToBackend()" style="position: relative">Potvrdiť registráciu</button>
+        <button type="button" [hidden]="!submitted" (click)="backToEdit()" style="position: relative; margin-left: 35%">Editovať registráciu</button>
+      </div>
     </div>
   </form>
   <div *ngIf = "personal_identification_number.errors?.PINInvalid">
@@ -124,7 +129,7 @@
   <div [hidden]="!created">
     Vaša registrácia bola úspešná a na váš e-mail {{email.value}} boli odoslané ďalšie pokyny.
     <div class="button-section">
-     <button type="button" (click)="redirectToHP()">Spät na hlavnú stránku</button>
+      <button type="button" (click)="redirectToHP()">Spät na hlavnú stránku</button>
     </div>
   </div>
 </div>
