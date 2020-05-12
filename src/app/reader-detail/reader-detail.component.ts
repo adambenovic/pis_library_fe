@@ -7,7 +7,7 @@ import { Fee } from '../entity/fee'
 import {AbstractControl, FormControl, FormGroup, ValidationErrors, Validators} from '@angular/forms';
 import {ValidationService} from '../service/validation.service';
 import {ValidationObject} from '../entity/validationObject';
-import {Observable, of} from 'rxjs';
+import {empty, Observable, of} from 'rxjs';
 import {catchError, map} from 'rxjs/operators';
 import {FeeService} from '../service/fee.service';
 import {GeneratedFee} from '../entity/generatedFee';
@@ -97,7 +97,11 @@ export class ReaderDetailComponent implements OnInit {
   getReader(): void {
     const id = +this.route.snapshot.paramMap.get('id');
     this.readerService.getReader(id)
-      .subscribe(reader => this.reader = reader);
+      .subscribe(
+        reader => this.reader = reader,
+        null,
+        () => this.imgURL = 'http://localhost:8000/api/downloadFile/' + this.reader.photo_path
+      );
   }
 
   getFees(): void {
@@ -105,7 +109,7 @@ export class ReaderDetailComponent implements OnInit {
     this.readerService.getReaderFees(id)
       .subscribe(fees => this.fees = fees);
   }
-  
+
   save(): void {
     this.readerService.updateReader(this.registrationForm.value as Reader).subscribe(reader => this.reader = reader);
   }

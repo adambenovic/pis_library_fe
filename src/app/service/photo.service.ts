@@ -9,9 +9,9 @@ import { FileUpload } from '../entity/uploadFile';
   providedIn: 'root'
 })
 export class PhotoService {
-  private fileUploadUrl = 'http://localhost:8000/api/uploadFile';
 
   constructor(private messageService: MessageService, private http: HttpClient) { }
+  private filePostUrl = 'http://localhost:8000/api/uploadFile';
 
   uploadOneFile(file: File): Observable<FileUpload> {
     const formData: FormData = new FormData();
@@ -19,7 +19,7 @@ export class PhotoService {
     const headers = new HttpHeaders();
     headers.append('Content-Type', 'multipart/form-data');
     headers.append('Accept', 'application/json');
-    return this.http.post<FileUpload>(this.fileUploadUrl, formData, { headers }).pipe(
+    return this.http.post<FileUpload>(this.filePostUrl, formData, { headers }).pipe(
       tap((fileUpload: FileUpload) => this.log(`photo uploaded`)),
       catchError(this.handleError<FileUpload>('fileUpload'))
     );
