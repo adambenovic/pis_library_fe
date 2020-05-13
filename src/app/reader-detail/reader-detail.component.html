@@ -1,5 +1,5 @@
 <div class="form-style-10">
-  <form [formGroup]="registrationForm">
+  <form [formGroup]="registrationForm" (ngSubmit)="save()">
 
     <div class="section"><span>1</span>Osobné údaje</div>
     <div class="inner-wrap">
@@ -137,10 +137,10 @@
       </div>
     </div>
     <div class="button-section">
-    <button (click)="save()">Uložiť zmeny</button>
-    <button (click)="goBack()">Vrátiť sa</button>
-    <button (click)="aprove()">Schváliť</button>
-    <button (click)="refuse()">Zamietnuť</button>
+      <button type="submit">Uložiť zmeny</button>
+      <button type="button" (click)="goBack()">Vrátiť sa</button>
+      <button type="button" (click)="aprove()">Schváliť</button>
+      <button type="button" (click)="refuse()">Zamietnuť</button>
     </div>
   </form>
 </div>

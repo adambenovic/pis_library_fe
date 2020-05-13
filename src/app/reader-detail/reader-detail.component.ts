@@ -10,7 +10,6 @@ import {ValidationObject} from '../entity/validationObject';
 import {empty, Observable, of} from 'rxjs';
 import {catchError, map} from 'rxjs/operators';
 import {FeeService} from '../service/fee.service';
-import {GeneratedFee} from '../entity/generatedFee';
 import {Router} from '@angular/router';
 import {PhotoService} from '../service/photo.service';
 import {FileUpload} from '../entity/uploadFile';
@@ -31,7 +30,6 @@ export class ReaderDetailComponent implements OnInit {
   get phone() { return this.registrationForm.get('phone'); }
   get consent() { return this.registrationForm.get('consent'); }
   get accept() { return this.registrationForm.get('accept'); }
-  get fee() { return this.registrationForm.get('fee'); }
   get photo() { return this.registrationForm.get('photo'); }
   get photo_path() { return this.registrationForm.get('photo_path'); }
   get street() { return this.registrationForm.get('address').get('street'); }
@@ -59,8 +57,6 @@ export class ReaderDetailComponent implements OnInit {
   fileUpload: FileUpload = new FileUpload();
   imgURL: any;
 
-  generatedFee: GeneratedFee = new GeneratedFee();
-
   ngOnInit(): void {
     this.registrationForm = new FormGroup({
       name: new FormControl('', Validators.required),
@@ -78,7 +74,6 @@ export class ReaderDetailComponent implements OnInit {
       phone: new FormControl('', {asyncValidators: this.validatePhone.bind(this)}),
       consent: new FormControl(''),
       accept: new FormControl(''),
-      fee: new FormControl(''),
       photo: new FormControl(''),
       photo_path: new FormControl(''),
       address: new FormGroup({
@@ -90,8 +85,6 @@ export class ReaderDetailComponent implements OnInit {
     });
     this.getReader();
     this.getFees();
-    this.selectedType = this.reader.type;
-    this.feeService.getFee(this.type.value).subscribe(generatedFee => this.generatedFee = generatedFee);
   }
 
   getReader(): void {
@@ -100,7 +93,7 @@ export class ReaderDetailComponent implements OnInit {
       .subscribe(
         reader => this.reader = reader,
         null,
-        () => this.imgURL = 'http://localhost:8000/api/downloadFile/' + this.reader.photo_path
+        () => this.imgURL = 'http://localhost:8000/api/downloadFile/' + this.reader.photo_path,
       );
   }
 
@@ -111,7 +104,25 @@ export class ReaderDetailComponent implements OnInit {
   }
 
   save(): void {
-    this.readerService.updateReader(this.registrationForm.value as Reader).subscribe(reader => this.reader = reader);
+    this.mapFormValuesToReader;
+    this.readerService.updateReader(this.reader).subscribe();
+  }
+
+  mapFormValuesToReader(){
+    this.reader.name = this.name.value;
+    this.reader.surname = this.surname.value;
+    this.reader.date_of_birth = this.date_of_birth.value;
+    this.reader.personal_identification_number = this.personal_identification_number.value;
+  this.reader.type = this.type.value;
+  this.reader.isic_number = this.isic_number.value;
+  this.reader.email = this.email.value;
+  this.reader.phone = this.phone.value;
+  this.reader.photo_path = this.photo_path.value;
+  this.reader.consent = this.consent.value;
+  this.reader.address.city = this.city.value;
+  this.reader.address.number = this.number.value;
+  this.reader.address.zip = this.zip.value;
+  this.reader.address.street = this.street.value;
   }
 
   goBack(): void {
