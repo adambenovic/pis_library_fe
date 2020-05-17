@@ -93,6 +93,7 @@
 .form-style-10 input[type="submit"]{
   background: #2A88AD;
   padding: 8px 20px 8px 20px;
+  margin-right: 65px;
   border-radius: 5px;
   -webkit-border-radius: 5px;
   -moz-border-radius: 5px;
@@ -135,7 +136,7 @@ a {
   text-decoration: none;
 }
 .h3 {
-  text-align: center;
+  text-align: left;
 }
 .grid {
   margin: 0;
@@ -145,6 +146,7 @@ a {
 }
 .col-0-4 {
   width: 30%;
+  text-align: left;
 }
 .col-4-4 {
   width: 10%;

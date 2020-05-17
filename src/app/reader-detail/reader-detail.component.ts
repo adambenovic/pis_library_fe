@@ -105,6 +105,7 @@ export class ReaderDetailComponent implements OnInit {
 
   save(): void {
     this.mapFormValuesToReader;
+    this.reader.verified = true;
     this.readerService.updateReader(this.reader).subscribe();
   }
 
@@ -113,28 +114,24 @@ export class ReaderDetailComponent implements OnInit {
     this.reader.surname = this.surname.value;
     this.reader.date_of_birth = this.date_of_birth.value;
     this.reader.personal_identification_number = this.personal_identification_number.value;
-  this.reader.type = this.type.value;
-  this.reader.isic_number = this.isic_number.value;
-  this.reader.email = this.email.value;
-  this.reader.phone = this.phone.value;
-  this.reader.photo_path = this.photo_path.value;
-  this.reader.consent = this.consent.value;
-  this.reader.address.city = this.city.value;
-  this.reader.address.number = this.number.value;
-  this.reader.address.zip = this.zip.value;
-  this.reader.address.street = this.street.value;
+    this.reader.type = this.type.value;
+    this.reader.isic_number = this.isic_number.value;
+    this.reader.email = this.email.value;
+    this.reader.phone = this.phone.value;
+    this.reader.photo_path = this.photo_path.value;
+    this.reader.consent = this.consent.value;
+    this.reader.address.city = this.city.value;
+    this.reader.address.number = this.number.value;
+    this.reader.address.zip = this.zip.value;
+    this.reader.address.street = this.street.value;
   }
 
   goBack(): void {
     this.location.back();
   }
 
-  aprove(): void {
-
-  }
-
   refuse(): void {
-
+    this.readerService.deleteReader(this.reader.id).subscribe(() => this.location.back());
   }
 
   validateISIC(ctrl: AbstractControl): Promise<ValidationErrors | null> | Observable<ValidationErrors | null> {

@@ -2,20 +2,24 @@
 <div class="search">
   <input class="form-control" type="text" name="search" [(ngModel)]="searchText" autocomplete="off" placeholder="&#61442;  Vyhľadávanie podľa mena priezviska alebo rodného čísla">
 </div>
-<h2 class="col-0-3">Priezvisko</h2>
-<h2 class="col-0-3">Meno</h2>
-<h2 class="col-0-3">Rodné číslo</h2>
+<h2 class="col-0-4">Priezvisko</h2>
+<h2 class="col-0-4">Meno</h2>
+<h2 class="col-0-4">Rodné číslo</h2>
+<h2 class="col-4-4">Schválený     </h2>
 <div class="grid grid-pad">
   <a *ngFor="let reader of sortedReadersBy('surname') | filter:searchText" class="list" routerLink="/readers/detail/{{reader.id}}">
     <div class="module reader">
-      <div class="col-0-3">
+      <div class="col-0-4">
         <h3>{{reader.surname}}</h3>
       </div>
-      <div class="col-0-3">
+      <div class="col-0-4">
         <h3>{{reader.name}}</h3>
       </div>
-      <div class="col-0-3">
+      <div class="col-0-4">
         <h3>{{reader.personal_identification_number}}</h3>
+      </div>
+      <div class="col-4-4">
+        <h3>{{reader.verified | yesNo}}</h3>
       </div>
     </div>
   </a>

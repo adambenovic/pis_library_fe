@@ -11,7 +11,8 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { HttpClientModule } from '@angular/common/http';
 import { RegistrationFormComponent } from './registration-form/registration-form.component';
 import { HomepageComponent } from './homepage/homepage.component';
-import { Ng2SearchPipeModule } from 'ng2-search-filter'
+import { Ng2SearchPipeModule } from 'ng2-search-filter';
+import { YesNoPipe } from './pipe/yes-no.pipe'
 
 
 @NgModule({
@@ -22,7 +23,8 @@ import { Ng2SearchPipeModule } from 'ng2-search-filter'
     MessagesComponent,
     DashboardComponent,
     RegistrationFormComponent,
-    HomepageComponent
+    HomepageComponent,
+    YesNoPipe
   ],
   imports: [
     BrowserModule,

@@ -40,6 +40,12 @@ h4 {
 .col-0-3 {
   width: 33%;
 }
+.col-0-4 {
+  width: 30%;
+}
+.col-4-4 {
+  width: 10%;
+}
 .module {
   padding: 20px;
   text-align: justify;

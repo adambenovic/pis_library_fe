@@ -123,13 +123,13 @@
                 <h3>{{fee.amount}}</h3>
               </div>
               <div class="col-0-4">
-                <h3>{{fee.valid_from}}</h3>
+                <h3>{{fee.valid_from | date:'yyyy-MM-dd'}}</h3>
               </div>
               <div class="col-0-4">
-                <h3>{{fee.valid_to}}</h3>
+                <h3>{{fee.valid_to | date:'yyyy-MM-dd'}}</h3>
               </div>
               <div class="col-4-4">
-                <h3>{{fee.paid}}</h3>
+                <h3>{{fee.paid | yesNo}}</h3>
               </div>
             </div>
           </a>
@@ -137,9 +137,8 @@
       </div>
     </div>
     <div class="button-section">
-      <button type="submit">Uložiť zmeny</button>
+      <button type="submit">Uložiť zmeny a schváliť</button>
       <button type="button" (click)="goBack()">Vrátiť sa</button>
-      <button type="button" (click)="aprove()">Schváliť</button>
       <button type="button" (click)="refuse()">Zamietnuť</button>
     </div>
   </form>
